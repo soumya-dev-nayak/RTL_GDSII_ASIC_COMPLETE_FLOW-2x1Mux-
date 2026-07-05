@@ -1,5 +1,23 @@
 # RTL to GDSII Flow using SKY130, Yosys, OpenROAD & Magic
 
+## 📑 Table of Contents
+
+- [🛠️ Prerequisites](#️-prerequisites)
+- [📥 Installing the IIC Docker Environment](#-installing-the-iic-docker-environment)
+- [📂 Accessing Your Project Files (Windows)](#-accessing-your-project-files-windows)
+- [STEP 1 — Project Setup & Environment Preparation](#step-1--project-setup--environment-preparation)
+- [STEP 2 — RTL Synthesis using Yosys](#step-2--rtl-synthesis-using-yosys)
+- [STEP 3 — OpenROAD Design Initialization & Linking](#step-3--openroad-design-initialization--linking)
+- [STEP 4 — Floorplanning](#step-4--floorplanning)
+- [STEP 5 — Routing Tracks & IO Pin Placement](#step-5--routing-tracks--io-pin-placement)
+- [STEP 6 — Global Placement & Detailed Placement](#step-6--global-placement--detailed-placement)
+- [STEP 7 — Global Routing](#step-7--global-routing)
+- [STEP 8 — Detailed Routing (Final Routing)](#step-8--detailed-routing-final-routing)
+- [STEP 9 — Magic Layout Verification, Extraction & GDS Generation](#step-9--magic-layout-verification-extraction--gds-generation)
+- [STEP 10 — Final GDS Verification using KLayout](#step-10--final-gds-verification-using-klayout)
+
+---
+
 # 🛠️ Prerequisites
 
 This project is implemented using the **IIC Open-Source EDA Docker Environment**, which provides a pre-configured Linux environment containing all the required ASIC design tools such as **OpenROAD, Yosys, Magic VLSI, KLayout, Netgen**, and the **SKY130 PDK**.
@@ -59,6 +77,8 @@ Inside the `designs` folder, you will find all the project directories and files
 
 This makes it convenient to edit, copy, back up, or upload your project files directly from Windows while continuing to execute the ASIC flow inside the Linux Docker environment.
 
+---
+
 ## STEP 1 — Project Setup & Environment Preparation
 
 ### Objective
@@ -112,7 +132,6 @@ Expected output:
 /foss/designs/MUX_2x1_RTL_to_GDS
 ```
 
-
 ### Verify Design File Exists
 
 ```bash
@@ -124,6 +143,7 @@ Expected:
 ```
 Mux_2x1.sv
 ```
+
 # 2x1 Multiplexer Files
 
 ## SystemVerilog Source (`Mux_2x1.sv`)
@@ -141,12 +161,16 @@ module Mux_2x1 (
 endmodule
 ```
 
-
 ### Verify OpenROAD
 
+```bash
 openroad
 ```
-Expected: OpenROAD 26Q2-xxx
+
+Expected:
+
+```
+OpenROAD 26Q2-xxx
 ```
 
 Exit:
@@ -362,21 +386,21 @@ At the end of Step 1, you should know:
 - How to verify that all required tools are installed and accessible.
 
 ---
- 
+
 ## STEP 2 — RTL Synthesis using Yosys
- 
+
 ### Objective
- 
+
 Convert the RTL (SystemVerilog/Verilog) description into a technology-mapped gate-level netlist using the SKY130 standard cell library.
- 
+
 At the end of this step, your RTL design will be transformed into a netlist containing only SKY130 standard cells (such as `sky130_fd_sc_hd__mux2_1`, `sky130_fd_sc_hd__and2_0`, etc.), which OpenROAD can use for physical implementation.
- 
+
 ### Theory
- 
+
 RTL written in Verilog/SystemVerilog is behavioral. Fabrication tools cannot manufacture behavioral descriptions.
- 
+
 Yosys performs the following tasks:
- 
+
 ```
 RTL (Mux_2x1.sv)
         │
@@ -398,325 +422,329 @@ SKY130 Standard Cells
         ▼
 Mux_2x1_sky130.v
 ```
- 
+
 ### Required Files
- 
+
 Your project folder should contain:
- 
+
 ```
 Mux_2x1.sv
 ```
- 
+
 PDK should contain:
- 
+
 ```
 $PDKPATH/libs.ref/sky130_fd_sc_hd/lib/
 ```
- 
+
 ### Go to the Project Directory
- 
+
 ```bash
 cd /foss/designs/MUX_2x1_RTL_to_GDS
 ```
- 
+
 Verify:
- 
+
 ```bash
 pwd
 ```
- 
+
 Expected:
- 
+
 ```
 /foss/designs/MUX_2x1_RTL_to_GDS
 ```
- 
+
 ### Launch Yosys
- 
+
 ```bash
 yosys
 ```
- 
+
 Expected:
- 
+
 ```
 yosys>
 ```
- 
+
 ### Read the RTL
- 
+
 If using Verilog:
- 
+
 ```
 read_verilog Mux_2x1.sv
 ```
- 
+
 If using SystemVerilog features:
- 
+
 ```
 read_verilog -sv Mux_2x1.sv
 ```
- 
+
 ### Verify the Module
- 
+
 ```
 hierarchy -check -top Mux_2x1
 ```
- 
+
 Purpose:
- 
+
 - Checks module hierarchy
 - Detects missing modules
 - Sets the top module
+
 Expected output:
- 
+
 ```
 Top module: \Mux_2x1
 ```
- 
+
 ### Generic Logic Synthesis
- 
+
 ```
 synth -top Mux_2x1
 ```
- 
+
 This performs:
- 
+
 - Process conversion
 - Optimization
 - Boolean simplification
 - FSM optimization (if present)
 - Resource sharing
 - Logic cleanup
+
 ### Load the SKY130 Liberty File
- 
+
 For our setup we used:
- 
+
 ```
 read_liberty -lib \
 $PDKPATH/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
- 
+
 If your library name differs, check it first:
- 
+
 ```bash
 ls $PDKPATH/libs.ref/sky130_fd_sc_hd/lib
 ```
- 
+
 ### Technology Mapping
- 
+
 Map generic logic to SKY130 cells.
- 
+
 ```
 dfflibmap \
 -liberty \
 $PDKPATH/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
- 
+
 Then:
- 
+
 ```
 abc \
 -liberty \
 $PDKPATH/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
- 
+
 ### Clean the Design
- 
+
 ```
 clean
 ```
- 
+
 Removes:
- 
+
 - unused logic
 - dangling wires
 - unused cells
+
 ### Write the Gate-Level Netlist
- 
+
 ```
 write_verilog Mux_2x1_sky130.v
 ```
- 
+
 This file will be used by OpenROAD.
- 
+
 ### Exit Yosys
- 
+
 ```
 exit
 ```
- 
+
 ### Verify the Netlist
- 
+
 Back in Linux terminal:
- 
+
 ```bash
 ls
 ```
- 
+
 Expected:
- 
+
 ```
 Mux_2x1.sv
 Mux_2x1_sky130.v
 ```
- 
+
 Open the synthesized netlist:
- 
+
 ```bash
 head -40 Mux_2x1_sky130.v
 ```
- 
+
 For our project it looked like:
- 
+
 ```verilog
 module Mux_2x1(i0, i1, sel, out);
- 
+
 ...
 sky130_fd_sc_hd__mux2_1 ...
 ...
 endmodule
 ```
- 
+
 ### Verify Standard Cells Used
- 
+
 Search the synthesized netlist:
- 
+
 ```bash
 grep sky130_fd_sc_hd Mux_2x1_sky130.v
 ```
- 
+
 Expected:
- 
+
 ```
 sky130_fd_sc_hd__mux2_1
 ```
- 
+
 or multiple SKY130 cells depending on your design.
- 
+
 ### Verify Module Name
- 
+
 ```bash
 grep module Mux_2x1_sky130.v
 ```
- 
+
 Expected:
- 
+
 ```
 module Mux_2x1(
 ```
- 
+
 ### ⚠ Important Note
- 
+
 Notice that the file name is:
- 
+
 ```
 Mux_2x1_sky130.v
 ```
- 
+
 but the module name inside is still:
- 
+
 ```
 module Mux_2x1
 ```
- 
+
 This is exactly what caused one of our OpenROAD issues. When linking the design later, you must use:
- 
+
 ```
 link_design Mux_2x1
 ```
- 
+
 not
- 
+
 ```
 link_design Mux_2x1_sky130
 ```
- 
+
 because OpenROAD links by module name, not by file name.
- 
+
 ### Files Generated After Step 2
- 
+
 Your directory should now contain:
- 
+
 ```
 Mux_2x1.sv
 Mux_2x1_sky130.v
 ```
- 
+
 ### Common Errors & Fixes
- 
+
 **Error 1: RTL file not found**
- 
+
 ```
 ERROR: Can't open input file
 ```
- 
+
 Fix:
- 
+
 ```bash
 ls
 ```
- 
+
 Ensure the RTL file is in the current directory.
- 
+
 **Error 2: Module not found**
- 
+
 ```
 Module Mux_2x1 not found
 ```
- 
+
 Fix:
- 
+
 Verify:
- 
+
 ```bash
 grep module Mux_2x1.sv
 ```
- 
+
 **Error 3: ABC cannot map**
- 
+
 Usually caused by an incorrect Liberty path.
- 
+
 Verify:
- 
+
 ```bash
 ls $PDKPATH/libs.ref/sky130_fd_sc_hd/lib
 ```
- 
+
 **Error 4: Wrong top module**
- 
+
 Always execute:
- 
+
 ```
 hierarchy -check -top Mux_2x1
 ```
- 
+
 before synthesis.
- 
+
 **Error 5: OpenROAD later reports**
- 
+
 ```
 Mux_2x1 is not a verilog module
 ```
- 
+
 This usually happens because:
- 
+
 - You forgot to `read_verilog Mux_2x1_sky130.v` in OpenROAD.
 - Or you tried:
+
 ```
 link_design Mux_2x1_sky130
 ```
- 
+
 instead of:
- 
+
 ```
 link_design Mux_2x1
 ```
- 
+
 This was one of the issues we debugged during your project.
- 
+
 ### Final Output of Step 2
- 
+
 ```
 RTL (Mux_2x1.sv)
         │
@@ -729,6 +757,7 @@ Technology Mapping
         ▼
 Mux_2x1_sky130.v
 ```
+
 ```verilog
 /* Generated by Yosys 0.64 (git sha1 6d2c445ae, g++ 13.3.0-6ubuntu2~24.04.1 -fPIC -O3) */
 
@@ -767,6 +796,9 @@ module Mux_2x1(i0, i1, sel, out);
   assign out = _2_;
 endmodule
 ```
+
+---
+
 ## STEP 3 — OpenROAD Design Initialization & Linking
 
 ### Objective
@@ -880,8 +912,9 @@ Without it, OpenROAD has no knowledge of the fabrication technology.
 ### Step 4 — Read the Standard Cell LEF
 
 ```
-read_lef /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hdlef
+read_lef /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef
 ```
+
 Expected:
 
 ```
@@ -1202,6 +1235,8 @@ mux_linked.odb
 
 This `.odb` file is the starting point for all physical implementation stages (floorplanning, placement, routing, etc.).
 
+---
+
 ## STEP 4 — Floorplanning
 
 ### Objective
@@ -1521,6 +1556,8 @@ mux_floorplan.odb
 - Don't be surprised if the effective utilization differs from the requested value for tiny designs.
 - The `.odb` file carries the loaded LEF/library information, so avoid re-reading LEFs after `read_db`.
 
+---
+
 ## STEP 5 — Routing Tracks & IO Pin Placement
 
 ### Objective
@@ -1838,6 +1875,8 @@ mux_pins.odb
 - Placed the four IO pins (i0, i1, sel, out) using place_pins
 - Saved the design as mux_pins.odb for the next stage
 
+---
+
 ## STEP 6 — Global Placement & Detailed Placement
 
 ### Objective
@@ -2151,6 +2190,8 @@ At the end of this step:
 - The placed design is saved in mux_detailed_place.odb.
 
 This completes the placement phase of the physical design flow.
+
+---
 
 ## STEP 7 — Global Routing
 
@@ -2471,6 +2512,8 @@ At the end of this step:
 ### Important Note (Based on Our Session)
 
 During our project, we discovered that `global_route` does not create the final metal wires. It only generates routing guides. The actual wires, vias, and DRC-clean routing are created in the next stage using the Detailed Router (`detailed_route`).
+
+---
 
 ## STEP 8 — Detailed Routing (Final Routing)
 
@@ -2806,6 +2849,8 @@ For our single-cell MUX design:
 - DRC violations: 0
 
 This `mux_detailed_route.odb` is the database we later used to generate the final `mux_final.def` and import the routed design into Magic for extraction, LVS netlist generation, and GDS creation.
+
+---
 
 ## STEP 9 — Magic Layout Verification, Extraction & GDS Generation
 
@@ -3225,6 +3270,8 @@ At the end of this step:
 - ✅ The final manufacturable GDSII file (mux_final.gds) is created successfully.
 - ✅ The complete RTL-to-GDS flow is now finished, and the design is ready for visualization, LVS, or tape-out preparation.
 
+---
+
 ## STEP 10 — Final GDS Verification using KLayout
 
 ### Objective
@@ -3469,5 +3516,3 @@ mux_final.spice            ← Extracted SPICE netlist
 mux_final.gds              ← Final GDSII layout
 drc.rpt                    ← Detailed routing DRC report
 ```
-
-
