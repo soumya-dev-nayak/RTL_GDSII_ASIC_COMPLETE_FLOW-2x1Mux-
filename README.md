@@ -333,7 +333,7 @@ find /foss/pdks -name tracks.info
 For our setup we used:
 
 ```
-/foss/pdks/ciel/sky130/versions/.../sky130A/libs.tech/librelane/sky130_fd_sc_hd/tracks.info
+/foss/pdks/sky130A/libs.tech/librelane/sky130_fd_sc_hd/tracks.info
 ```
 
 ### Files after Step 1
@@ -893,7 +893,7 @@ For our setup:
 
 ```
 read_lef \
-/foss/pdks/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__nom.tlef
+/foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__nom.tlef
 ```
 
 **What is a Tech LEF?**
