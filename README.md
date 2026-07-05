@@ -1,5 +1,64 @@
 # RTL to GDSII Flow using SKY130, Yosys, OpenROAD & Magic
 
+# 🛠️ Prerequisites
+
+This project is implemented using the **IIC Open-Source EDA Docker Environment**, which provides a pre-configured Linux environment containing all the required ASIC design tools such as **OpenROAD, Yosys, Magic VLSI, KLayout, Netgen**, and the **SKY130 PDK**.
+
+> **Note:** This repository assumes that all commands are executed inside the IIC Docker environment.
+
+---
+
+# 📥 Installing the IIC Docker Environment
+
+1. Install **Docker Desktop** from the official website:
+
+   https://www.docker.com/products/docker-desktop/
+
+2. Download the **IIC-OSIC-TOOLS** installer package (the image and `.bat` file are provided in this repository).
+
+3. Double-click the provided **`.bat`** file.
+
+4. The installation process may take approximately **15–20 minutes**, depending on your internet speed and system performance.
+
+5. Once the installation is complete, a **Linux terminal** will automatically open. This is the environment where all the commands in this project are executed.
+
+---
+
+# 📂 Accessing Your Project Files (Windows)
+
+If you are using **Windows**, the files created inside the Docker/Linux environment are also available on your Windows file system.
+
+Navigate to:
+
+```text
+C:\
+ └── Users
+      └── <Your_Username>
+           └── eda
+                └── foss
+                     └── designs
+                          └── <Your_Project_Folder>
+```
+
+For example, on my system:
+
+```text
+C:\Users\ASUS\eda\foss\designs\
+```
+
+Inside the `designs` folder, you will find all the project directories and files created during the RTL-to-GDS flow, including:
+
+- RTL source files
+- Synthesis outputs
+- OpenROAD databases (`.odb`)
+- DEF files
+- Magic layout files (`.mag`)
+- SPICE netlists
+- GDSII layouts
+- Reports and other generated files
+
+This makes it convenient to edit, copy, back up, or upload your project files directly from Windows while continuing to execute the ASIC flow inside the Linux Docker environment.
+
 ## STEP 1 — Project Setup & Environment Preparation
 
 ### Objective
