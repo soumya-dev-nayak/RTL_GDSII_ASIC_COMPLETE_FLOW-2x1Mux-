@@ -1,0 +1,10 @@
+* NGSPICE file created from Mux_2x1.ext - technology: sky130A
+
+* Black-box entry subcircuit for sky130_fd_sc_hd__mux2_1 abstract view
+.subckt sky130_fd_sc_hd__mux2_1 A0 A1 S VGND VNB VPB VPWR X
+.ends
+
+.subckt Mux_2x1 i0 i1 out sel
+X_4_ i0 i1 sel _4_/VGND VSUBS _4_/VPB _4_/VPWR out sky130_fd_sc_hd__mux2_1
+.ends
+

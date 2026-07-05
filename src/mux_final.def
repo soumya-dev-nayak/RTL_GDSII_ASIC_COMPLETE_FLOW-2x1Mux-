@@ -1,0 +1,65 @@
+VERSION 5.8 ;
+DIVIDERCHAR "/" ;
+BUSBITCHARS "[]" ;
+DESIGN Mux_2x1 ;
+UNITS DISTANCE MICRONS 1000 ;
+DIEAREA ( 0 0 ) ( 10125 10125 ) ;
+ROW ROW_0 unithd 2300 2720 N DO 12 BY 1 STEP 460 0 ;
+TRACKS X 230 DO 22 STEP 460 LAYER li1 ;
+TRACKS Y 170 DO 30 STEP 340 LAYER li1 ;
+TRACKS X 170 DO 30 STEP 340 LAYER met1 ;
+TRACKS Y 170 DO 30 STEP 340 LAYER met1 ;
+TRACKS X 230 DO 22 STEP 460 LAYER met2 ;
+TRACKS Y 230 DO 22 STEP 460 LAYER met2 ;
+TRACKS X 340 DO 15 STEP 680 LAYER met3 ;
+TRACKS Y 340 DO 15 STEP 680 LAYER met3 ;
+TRACKS X 460 DO 11 STEP 920 LAYER met4 ;
+TRACKS Y 460 DO 11 STEP 920 LAYER met4 ;
+TRACKS X 1700 DO 3 STEP 3400 LAYER met5 ;
+TRACKS Y 1700 DO 3 STEP 3400 LAYER met5 ;
+GCELLGRID X 0 DO 1 STEP 6900 ;
+GCELLGRID Y 0 DO 1 STEP 6900 ;
+COMPONENTS 1 ;
+    - _4_ sky130_fd_sc_hd__mux2_1 + PLACED ( 3220 2720 ) N ;
+END COMPONENTS
+PINS 4 ;
+    - i0 + NET i0 + DIRECTION INPUT + USE SIGNAL
+      + PORT
+        + LAYER met2 ( -70 -242 ) ( 70 243 )
+        + PLACED ( 4830 242 ) N ;
+    - i1 + NET i1 + DIRECTION INPUT + USE SIGNAL
+      + PORT
+        + LAYER met2 ( -70 -242 ) ( 70 243 )
+        + PLACED ( 3910 242 ) N ;
+    - out + NET _2_ + DIRECTION OUTPUT + USE SIGNAL
+      + PORT
+        + LAYER met2 ( -70 -242 ) ( 70 243 )
+        + PLACED ( 6670 242 ) N ;
+    - sel + NET sel + DIRECTION INPUT + USE SIGNAL
+      + PORT
+        + LAYER met2 ( -70 -242 ) ( 70 243 )
+        + PLACED ( 5750 242 ) N ;
+END PINS
+NETS 4 ;
+    - _2_ ( PIN out ) ( _4_ X ) + USE SIGNAL
+      + ROUTED met2 ( 6670 340 0 ) ( * 4590 )
+      NEW met1 ( 3450 4590 ) ( 6670 * )
+      NEW met1 ( 6670 4590 ) M1M2_PR
+      NEW li1 ( 3450 4590 ) L1M1_PR_MR ;
+    - i0 ( PIN i0 ) ( _4_ A0 ) + USE SIGNAL
+      + ROUTED met2 ( 4830 340 0 ) ( * 3230 )
+      NEW met1 ( 4830 3230 ) ( 5290 * )
+      NEW met1 ( 4830 3230 ) M1M2_PR
+      NEW li1 ( 5290 3230 ) L1M1_PR_MR ;
+    - i1 ( PIN i1 ) ( _4_ A1 ) + USE SIGNAL
+      + ROUTED met2 ( 3910 340 0 ) ( * 3570 )
+      NEW met1 ( 3910 3570 ) ( 5750 * )
+      NEW met1 ( 3910 3570 ) M1M2_PR
+      NEW li1 ( 5750 3570 ) L1M1_PR_MR ;
+    - sel ( PIN sel ) ( _4_ S ) + USE SIGNAL
+      + ROUTED met2 ( 5750 340 0 ) ( * 4250 )
+      NEW met1 ( 5750 4250 ) ( 6210 * )
+      NEW met1 ( 5750 4250 ) M1M2_PR
+      NEW li1 ( 6210 4250 ) L1M1_PR_MR ;
+END NETS
+END DESIGN
