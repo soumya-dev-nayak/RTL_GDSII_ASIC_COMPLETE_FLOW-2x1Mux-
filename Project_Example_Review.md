@@ -84,7 +84,7 @@ report_wns
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Floorplan_utilization_img.png" width="800">
+  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Floorplan_utilization_img.png" width="1800">
 </p>
 
 <p align="center">
@@ -93,7 +93,7 @@ report_wns
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Detailed_Area%26Routing_op.png" width="800">
+  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Detailed_Area%26Routing_op.png" width="1800">
 </p>
 
 <p align="center">
@@ -102,7 +102,7 @@ report_wns
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Metal_routing_img.png" width="800">
+  <img src="https://raw.githubusercontent.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/main/pics/mux_2x1_openroad_Metal_routing_img.png" width="1800">
 </p>
 
 <p align="center">
