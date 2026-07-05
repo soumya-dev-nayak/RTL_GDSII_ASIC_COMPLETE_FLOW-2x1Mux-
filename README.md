@@ -1,5 +1,7 @@
 # RTL to GDSII Flow using SKY130, Yosys, OpenROAD & Magic
 
+## Project Review:- [2x1_mux_review](https://github.com/soumya-dev-nayak/RTL_GDSII_ASIC_COMPLETE_FLOW-2x1Mux-/tree/main)
+
 ## 📑 Table of Contents
 
 - [🛠️ Prerequisites](#️-prerequisites)
